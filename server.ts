@@ -245,7 +245,14 @@ interface StoreDB {
 function loadDB(): StoreDB {
   if (fs.existsSync(DB_FILE)) {
     try {
-      const data = JSON.parse(fs.readFileSync(DB_FILE, 'utf-8'));
+      const cleanedRaw = fs.readFileSync(DB_FILE, 'utf-8')
+        .replace(/liyau_logo\.svg/gi, 'khojau_logo.svg')
+        .replace(/Liyau/g, 'Khojau')
+        .replace(/liyau/g, 'khojau')
+        .replace(/LIYAU/g, 'KHOJAU')
+        .replace(/लिऔँ/g, 'खोजौँ')
+        .replace(/लिऔं/g, 'खोजौँ');
+      const data = JSON.parse(cleanedRaw);
       const settings: StoreSettings = {
         ...INITIAL_SETTINGS,
         ...(data.settings || {}),

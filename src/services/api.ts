@@ -24,13 +24,21 @@ export async function fetchStoreSettings(): Promise<{ settings: StoreSettings; c
     if (res.ok && res.headers.get('content-type')?.includes('application/json')) {
       const data = await res.json();
       if (data && data.settings) {
+        const rawStr = JSON.stringify(data.settings)
+          .replace(/liyau_logo\.svg/gi, 'khojau_logo.svg')
+          .replace(/Liyau/g, 'Khojau')
+          .replace(/liyau/g, 'khojau')
+          .replace(/LIYAU/g, 'KHOJAU')
+          .replace(/लिऔँ/g, 'खोजौँ')
+          .replace(/लिऔं/g, 'खोजौँ');
+        const cleanedSettings: StoreSettings = JSON.parse(rawStr);
         return {
           settings: {
-            ...data.settings,
-            logoUrl: resolveAssetUrl(data.settings.logoUrl),
-            heroBannerUrl: resolveAssetUrl(data.settings.heroBannerUrl),
-            promoBannerUrl: resolveAssetUrl(data.settings.promoBannerUrl),
-            nepalFlagUrl: resolveAssetUrl(data.settings.nepalFlagUrl),
+            ...cleanedSettings,
+            logoUrl: resolveAssetUrl(cleanedSettings.logoUrl),
+            heroBannerUrl: resolveAssetUrl(cleanedSettings.heroBannerUrl),
+            promoBannerUrl: resolveAssetUrl(cleanedSettings.promoBannerUrl),
+            nepalFlagUrl: resolveAssetUrl(cleanedSettings.nepalFlagUrl),
           },
           categories: data.categories || DEFAULT_CATEGORIES,
         };

@@ -266,7 +266,7 @@ export const StoreProvider: React.FC<{ children: ReactNode }> = ({ children }) =
 
     // 3. Cross-tab storage listener & window focus sync
     const handleStorageChange = (e: StorageEvent) => {
-      if (e.key === 'khojau_static_store_db_v1') {
+      if (e.key === 'khojau_static_store_db_v2' || e.key === 'khojau_static_store_db_v1') {
         triggerLiveSync();
       }
     };
