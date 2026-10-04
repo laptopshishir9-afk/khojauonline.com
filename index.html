@@ -76,6 +76,22 @@
           if (window.__khojauMounted || window.__khojauStaticBooting) return;
           window.__khojauStaticBooting = true;
 
+          // Load pre-built CSS & JS bundle from ./src/static-bundle.* first (instant load on GitHub Pages)
+          var cssLink = document.createElement('link');
+          cssLink.rel = 'stylesheet';
+          cssLink.href = './src/static-bundle.css';
+          document.head.appendChild(cssLink);
+
+          var prebuiltScript = document.createElement('script');
+          prebuiltScript.type = 'module';
+          prebuiltScript.src = './src/static-bundle.js';
+          prebuiltScript.onerror = function () {
+            bootBabelFallback();
+          };
+          document.body.appendChild(prebuiltScript);
+        }
+
+        function bootBabelFallback() {
           // 1. Load Tailwind v4 Browser Play CDN for full utility class styling
           var tw = document.createElement('script');
           tw.src = 'https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4';
